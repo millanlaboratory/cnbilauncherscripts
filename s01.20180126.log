@@ -1,0 +1,7 @@
+/home/cnbi/data/s01/s01.20180126.161138.offline.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.161139 modality=offline block=mi taskset=mi_fes_flexion
+/home/cnbi/data/s01/s01.20180126.161406.offline.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.161407 modality=offline block=mi taskset=mi_fes_flexion
+/home/cnbi/data/s01/s01.20180126.162027.offline.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.162028 modality=offline block=mi taskset=mi_fes_flexion
+/home/cnbi/data/s01/s01.20180126.163656.offline.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.163657 modality=offline block=mi taskset=mi_fes_flexion
+/home/cnbi/data/s01/s01.20180126.163959.offline.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.163959 modality=offline block=mi taskset=mi_fes_flexion
+/home/cnbi/data/s01/s01.20180126.170312.online.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.170313 modality=online block=mi taskset=mi_fes_flexion classifier=s01_flrst_20180126.mat rejection=0.600000 integration=0.960000 thresholds=( 0.700000 0.990000 )
+/home/cnbi/data/s01/s01.20180126.170554.online.mi.mi_fes_flexion.gdf /home/cnbi/data/s01experimenter=Julien subject=s01 daystamp=20180126.170556 modality=online block=mi taskset=mi_fes_flexion classifier=s01_flrst_20180126.mat rejection=0.600000 integration=0.960000 thresholds=( 0.700000 0.990000 )
