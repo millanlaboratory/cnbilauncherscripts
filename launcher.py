@@ -110,6 +110,8 @@ def createMovementJson(subject):
 
 user = getpass.getuser()
 dataPath = "/home/" + user + "/data"
+if not os.path.isdir(dataPath):
+	os.makedirs(dataPath)
 onlydir = [f for f in os.listdir(dataPath) if os.path.isdir(os.path.join(dataPath, f))]
 # app.go
 app=gui()

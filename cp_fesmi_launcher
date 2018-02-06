@@ -1,19 +1,22 @@
 #!/bin/bash
-
+cd /home/cnbi/dev/CNBIscripts/
+gnome-terminal --title "loop"\
+---tab -e "bash -c 'cl_runloopscope -d gtec'" --title "Loop"
 
 NAME="FESMILauncher"
-xml="$(python launcher.py)"
+xml="$(python3 launcher.py)"
 if [ "$xml" == "-1" ]; then
 	exit 1
 fi
-taskset="$(python launcherTaskSet.py)"
+taskset="$(python3 launcherTaskSet.py)"
 if [ "$taskset" == "-1" ]; then
 	exit 1
 fi
-modality="$(python launcherModality.py)"
+modality="$(python3 launcherModality.py)"
 if [ "$modality" == "-1" ]; then
 	exit 1
 fi
+
 
 
 
@@ -54,7 +57,12 @@ storedir="${HOME}/data/"
 block=$DEFAULT_MI_BLOCK
 
 executable=$(ccfg_cli -x $xml -M $modality -B $block -p)
-
+echo "[$NAME] - Xml:        $xml"
+echo "[$NAME] - Movements:  $movements"
+echo "[$NAME] - Subject:    $subject"
+echo "[$NAME] - Block:      $block"
+echo "[$NAME] - Taskset:    $taskset"
+echo "[$NAME] - Modality:   $modality"
 if [ "$executable" == "" ]; then
 	echo "[$NAME] - Cannot retrieve executable name" >&2
 	exit 1
@@ -66,8 +74,12 @@ if [ "$subject" == "" ]; then
 	exit 1
 fi
 
-successFES="$(python setupFESValues.py --task $taskset --subject $subject)"
+successFES="$(python3 setupFESValues.py --task $taskset --subject $subject)"
 if [ "$successFES" == "-1" ]; then
+	exit 1
+fi
+successClassifier="$(python3 setClassifier.py --modality $modality --subject $subject)"
+if [ "$successClassifier" == "-1" ]; then
 	exit 1
 fi
 
@@ -105,6 +117,7 @@ echo "[$NAME] - Uploading XML parameters to nameserver"
 if [ "$modality" == "offline" ]; then
 	cl_init -x $xml -lF -B $block -T $taskset
 elif [ "$modality" == "online" ]; then
+	echo "online"
 	cl_init -x $xml -lN -B $block -T $taskset
 	MATLABPID=$(cl_init -x $xml -sc -N -B $block -T $taskset)
 else
@@ -148,3 +161,6 @@ fi
 cl_init -u -B $block
 cl_rpc eraseconfig $block subject 
 cl_rpc eraseconfig $block logname
+killall cl_keepalive
+cl_killloop
+killall gnome-terminal
