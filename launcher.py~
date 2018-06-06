@@ -4,6 +4,7 @@ import os
 from shutil import copyfile
 import xml.etree.ElementTree as ET
 import datetime
+from screeninfo import get_monitors
 import json
 global app 
 
@@ -131,7 +132,7 @@ app.getEntry("Subject")
 app.addLabelEntry("Age")
 app.getEntry("Age")
 app.addButtons(["Validate", "Cancel"], validateSubject)
-app.setLocation(500, 450)
+app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
 app.stopSubWindow()
 
 # this is another pop-up
@@ -139,10 +140,10 @@ app.startSubWindow("Existing Subject")
 for directory in onlydir:
 	app.addRadioButton("subjects", directory)
 app.addButtons(["Choose", "Back"], chooseSubject)
-app.setLocation(500, 450)
+app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
 app.stopSubWindow()
 
 # these go in the main window
 app.addButtons(["New Subject", "Existing Subject", "Exit"], whichSubject)
-app.setLocation(500, 450)
+app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
 app.go()

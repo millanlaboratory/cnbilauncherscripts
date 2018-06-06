@@ -1,4 +1,7 @@
 from appJar import gui
+from screeninfo import get_monitors
+
+
 
 global app 
 

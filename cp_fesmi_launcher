@@ -4,20 +4,39 @@ gnome-terminal --title "loop"\
 ---tab -e "bash -c 'cl_runloopscope -d gtec'" --title "Loop"
 
 NAME="FESMILauncher"
-xml="$(python3 launcher.py)"
-if [ "$xml" == "-1" ]; then
+subject="$(python3 launcher.py)"
+if [ "$subject" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
+
+session="$(python3 launcherSession.py --subject $subject)"
+if [ "$session" == "-1" ]; then
+    killall cl_keepalive
+    cl_killloop
+    exit 1
+fi
+
 taskset="$(python3 launcherTaskSet.py)"
 if [ "$taskset" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 modality="$(python3 launcherModality.py)"
 if [ "$modality" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 
-
+xml="$(python3 getProtocol.py --subject $subject --modality $modality)"
+if [ "$xml" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
+	exit 1
+fi
 
 
 DEFAULT_MI_BLOCK="mi"
@@ -49,6 +68,8 @@ error_handling(){
 
 	if [ $code -ne 0 ]; then
 		echo "[$NAME] - $name error code: $code: Exit"
+		killall cl_keepalive
+		cl_killloop
 		exit 1
 	fi
 }
@@ -65,33 +86,43 @@ echo "[$NAME] - Taskset:    $taskset"
 echo "[$NAME] - Modality:   $modality"
 if [ "$executable" == "" ]; then
 	echo "[$NAME] - Cannot retrieve executable name" >&2
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 
 subject=$(ccfg_getstring -x $xml -r cnbiconfig -p subject/id)
 if [ "$subject" == "" ]; then
 	echo "[$NAME] - Cannot retrieve subject id" >&2
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 
 successFES="$(python3 setupFESValues.py --task $taskset --subject $subject)"
 if [ "$successFES" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
-successClassifier="$(python3 setClassifier.py --modality $modality --subject $subject)"
+successClassifier="$(python3 setClassifier.py --modality $modality --subject $subject --taskset $taskset)"
 if [ "$successClassifier" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 
 echo "[$NAME] - Starting FES control"
 movements="$(python launcherFES.py $subject)"
 if [ "$movements" == "-1" ]; then
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 gnome-terminal \
----tab -e "bash -c 'sleep 2; cl_keepalive fesControl -d gui -n /bus -f $movements'" --title "FES control"
+---tab -e "bash -c 'sleep 2; cl_keepalive fesControl -d verbose -n /dev -f $movements'" --title "FES control"
 
-storedir="$storedir$subject"
+storedir="$storedir$subject/$session"
 echo "[$NAME] - Data saving: $storedir "
 
 # Get GDF and log names
@@ -99,6 +130,8 @@ gdfname=$(ccfg_cli -x $xml -M $modality -B $block -T $taskset -a)
 logname=$(ccfg_cli -x $xml -M $modality -B $block -T $taskset -o)
 if [ "$logname" == "" ] || [ "$gdfname" == "" ]; then
 	echo "[$NAME] - Cannot retrieve gdf and log names " >&2
+	killall cl_keepalive
+	cl_killloop
 	exit 1
 fi
 
@@ -148,7 +181,7 @@ cl_rpc openxdf $storedir"/"$gdfname".gdf" $logname "$storedir$logline"
 echo "[$NAME] - Launching executable protocol: $executable"
 $executable
 
-sleep 2
+sleep 10
 
 echo "[$NAME] - Closing GDF file"
 cl_rpc closexdf
@@ -164,3 +197,4 @@ cl_rpc eraseconfig $block logname
 killall cl_keepalive
 cl_killloop
 killall gnome-terminal
+rm *.log

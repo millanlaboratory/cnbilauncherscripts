@@ -1,4 +1,7 @@
 from appJar import gui
+from screeninfo import get_monitors
+
+
 
 global app 
 
@@ -21,6 +24,6 @@ app.setGuiPadding(padding, padding)
 app.addRadioButton("modality", "Offline")
 app.addRadioButton("modality", "Online")
 app.addButtons(["Validate", "Cancel"], chooseModality)
-app.setLocation(500, 450)
+app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
 
 app.go()

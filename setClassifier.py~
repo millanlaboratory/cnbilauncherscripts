@@ -90,7 +90,7 @@ if modality == "online":
             app.setEntryDefault("Threshold Movement", task.find('threshold').find(movementClass).text)
             app.setEntryDefault("Threshold Rest", task.find('threshold').find('mi_rest').text)
     app.addButtons(["Set", "Exit"], chooseValues)
-    app.setLocation(500, 450)
+    app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
     app.stopSubWindow()
 
 
@@ -98,5 +98,5 @@ if modality == "online":
     for filename in f:
         app.addRadioButton("classifier", filename)
     app.addButtons(["Validate", "Cancel"], chooseClassifier)
-    app.setLocation(500, 450)
+    app.setLocation(get_monitors()[0].width/2, get_monitors()[0].height/2)
     app.go()
