@@ -5,6 +5,7 @@ from shutil import copyfile
 import xml.etree.ElementTree as ET
 import datetime
 import json
+import patientalloc
 global app 
 
 def whichSubject(button):
@@ -62,8 +63,8 @@ def createXML(subject,age):
 	subjectPath = dataPath + "/" + subject
 	xmlFile = subjectPath + "/mi_stroke_prot.xml" 
 	xmlFileOnline = subjectPath + "/mi_stroke_prot_online.xml" 
-	copyfile("/home/cnbi/.cnbitk/cnbimi/xml/mi_stroke_prot.xml", xmlFile)
-	copyfile("/home/cnbi/.cnbitk/cnbimi/xml/mi_stroke_prot_online.xml", xmlFileOnline)
+	copyfile("/home/" + user + "/.cnbitk/cnbimi/xml/mi_stroke_prot.xml", xmlFile)
+	copyfile("/home/" + user + "/.cnbitk/cnbimi/xml/mi_stroke_prot_online.xml", xmlFileOnline)
 	now = datetime.datetime.now()
 	tree = ET.parse(xmlFile)
 	root = tree.getroot()

@@ -31,7 +31,7 @@ if [ "$modality" == "-1" ]; then
 	exit 1
 fi
 
-xml="$(python3 getProtocol.py --subject $subject --modality $modality)"
+xml="$(python3 getProtocol.py --subject $subject --modality $modality --session $session)"
 if [ "$xml" == "-1" ]; then
 	killall cl_keepalive
 	cl_killloop
@@ -197,4 +197,4 @@ cl_rpc eraseconfig $block logname
 killall cl_keepalive
 cl_killloop
 killall gnome-terminal
-rm *.log
+rm *.log 

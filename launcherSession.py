@@ -30,6 +30,9 @@ def validateSession(button):
     if button == "Validate":
         session = app.getEntry("Session")
         createPath(session)
+        dataPath = "/home/" + user + "/data"
+        subjectPath = dataPath + "/" + subject
+        copyfile(subjectPath + "/mi_stroke_prot.xml", subjectPath + "/" + session + "/mi_stroke_prot.xml")
         app.stop()
         print(session)
     elif button == "Cancel":
