@@ -12,9 +12,13 @@ def whichSubject(button):
 	if button == "Exit":
 		print(str(-1))
 		exit()
+	elif button == "New Subject":
+		app.stop()
+		patientalloc.main()
 	else:
 		app.showSubWindow(button)
 		app.hide()
+
 def validateSubject(button):
 	global app
 	if button == "Validate":

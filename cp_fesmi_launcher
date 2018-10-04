@@ -113,7 +113,7 @@ if [ "$successClassifier" == "-1" ]; then
 fi
 
 echo "[$NAME] - Starting FES control"
-movements="$(python launcherFES.py $subject)"
+movements="$(python3 launcherFES.py $subject)"
 if [ "$movements" == "-1" ]; then
 	killall cl_keepalive
 	cl_killloop
