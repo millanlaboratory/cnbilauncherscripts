@@ -1,0 +1,2 @@
+cd $HOME/dev/cnbi-smrtrain
+matlab -r "smr_train_init; cd /home/cnbi/data/; eegc3_smr_train;"

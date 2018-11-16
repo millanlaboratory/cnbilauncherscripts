@@ -1,6 +1,4 @@
 #!/bin/bash
-cd ~/dev/shambcifesdata/Code
-./computeSham
 cd ~/dev/CNBIscripts/
 gnome-terminal --title "loop"\
 ---tab -e "bash -c 'cl_runloopscope -d gtec'" --title "Loop"
@@ -150,9 +148,10 @@ echo "[$NAME] - LOG:        $logname"
 # Upload all parameters to nameserver 
 echo "[$NAME] - Uploading XML parameters to nameserver"
 if [ "$modality" == "offline" ]; then
+	echo "[$NAME] - Intializing offline"
 	cl_init -x $xml -lF -B $block -T $taskset
 elif [ "$modality" == "online" ]; then
-	echo "online"
+	echo "[$NAME] - Intializing online"
 	cl_init -x $xml -lN -B $block -T $taskset
 	MATLABPID=$(cl_init -x $xml -sc -N -B $block -T $taskset)
 else
@@ -198,8 +197,6 @@ cl_rpc eraseconfig $block subject
 cl_rpc eraseconfig $block logname
 killall cl_keepalive
 cl_killloop
-killall gnome-terminal
 rm *.log 
-cd ~/dev/shambcifesdata/Code
-./computeSham
-cd ~/dev/CNBIscripts/
+exit
+exit

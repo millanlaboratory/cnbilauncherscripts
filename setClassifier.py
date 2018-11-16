@@ -1,6 +1,5 @@
 import argparse
 from appJar import gui
-from screeninfo import get_monitors
 import getpass
 import sys
 from os import walk
@@ -17,20 +16,23 @@ global fileName
 parser = argparse.ArgumentParser()
 parser.add_argument("--modality", help="For which modality you are setting classifier path", required = True)
 parser.add_argument("--subject",    help="For which subject you are setting classifier path", required = True)
+parser.add_argument("--session",    help="For which session you are setting classifier path", required = True)
 parser.add_argument("--taskset",    help="For which tasket you are setting threshold values", required = True)
 
 
 args, unknown = parser.parse_known_args()
 modality = args.modality
 subject = args.subject
+session = args.session
 taskset = args.taskset
+
+user = getpass.getuser()
+path = "/home/" + user + "/data/" + subject + "/" + session + "/"
+xmlFile = path + "/mi_stroke_prot.xml"
 
 def chooseClassifier(button):
     global app
     if button == "Validate":
-        user = getpass.getuser()
-        path = "/home/" + user + "/data/" + subject + "/"
-        xmlFile = path + "/mi_stroke_prot.xml"
         tree = ET.parse(xmlFile)
         root = tree.getroot()
         root.find('classifier').find('kmi2').find('filename').text = app.getRadioButton("classifier")
@@ -44,9 +46,6 @@ def chooseClassifier(button):
 def chooseValues(button):
     global app
     if button == "Set":
-        user = getpass.getuser()
-        path = "/home/" + user + "/data/" + subject + "/"
-        xmlFile = path + "/mi_stroke_prot.xml"
         tree = ET.parse(xmlFile)
         root = tree.getroot()
         tasksets = root.find('online').find('mi').findall('taskset')
@@ -59,8 +58,8 @@ def chooseValues(button):
     elif button == "Exit":
         print(str(-1))
     app.stop()
-if modality == "online":
 
+if modality == "online":
     user = getpass.getuser()
     path = "/home/" + user + "/data/" + subject + "/"
     f = []
@@ -74,9 +73,6 @@ if modality == "online":
     sys.argv = [sys.argv[0]];
     padding = 10;
     app=gui()
-    user = getpass.getuser()
-    path = "/home/" + user + "/data/" + subject + "/"
-    xmlFile = path + "/mi_stroke_prot.xml"
     tree = ET.parse(xmlFile)
     root = tree.getroot()
     app.startSubWindow("Threshold")
