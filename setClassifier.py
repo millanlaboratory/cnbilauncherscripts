@@ -4,6 +4,7 @@ import getpass
 import sys
 from os import walk
 import xml.etree.ElementTree as ET
+import shutil
 
 
 global app 
@@ -27,8 +28,9 @@ session = args.session
 taskset = args.taskset
 
 user = getpass.getuser()
-path = "/home/" + user + "/data/" + subject + "/" + session + "/"
-xmlFile = path + "/mi_stroke_prot.xml"
+path = "/home/" + user + "/data/" + subject + "/"
+pathToSession = "/home/" + user + "/data/" + subject + "/" + session + "/"
+xmlFile = pathToSession + "mi_stroke_prot.xml"
 
 def chooseClassifier(button):
     global app
@@ -37,6 +39,7 @@ def chooseClassifier(button):
         root = tree.getroot()
         root.find('classifier').find('kmi2').find('filename').text = app.getRadioButton("classifier")
         tree.write(xmlFile)
+        shutil.copyfile(path + app.getRadioButton("classifier"), pathToSession + app.getRadioButton("classifier"))
         app.showSubWindow('Threshold')
         app.hide()
     elif button == "Cancel":
@@ -61,7 +64,6 @@ def chooseValues(button):
 
 if modality == "online":
     user = getpass.getuser()
-    path = "/home/" + user + "/data/" + subject + "/"
     f = []
     for (dirpath, dirnames, filenames) in walk(path):
         for filename in filenames:

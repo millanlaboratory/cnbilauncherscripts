@@ -32,6 +32,7 @@ def chooseValues(button):
 	 		data["sequence"][1]["currentDecrementerParameters"][1] = app.getEntry("Max stim forearm") if app.getEntry("Max stim forearm") is not None else data["sequence"][1]["currentDecrementerParameters"][1]
 	 		dataDouble["sequence"][0]["current"] = app.getEntry("Sensory stim biceps") if app.getEntry("Sensory stim biceps") is not None else dataDouble["sequence"][0]["current"]
 	 		dataDouble["sequence"][1]["current"] = app.getEntry("Sensory stim forearm") if app.getEntry("Sensory stim forearm") is not None else dataDouble["sequence"][1]["current"]
+	 		dataSingle["sequence"][0]["current"] = app.getEntry("Sensory stim biceps") if app.getEntry("Sensory stim biceps") is not None else dataDouble["sequence"][0]["current"]
 	 	elif task == "extension":
 	 		data["sequence"][0]["currentIncrementerParameters"][1] = app.getEntry("Max stim shoulder") if app.getEntry("Max stim shoulder") is not None else data["sequence"][0]["currentIncrementerParameters"][1]
 	 		data["sequence"][1]["currentIncrementerParameters"][1] = app.getEntry("Max stim forearm") if app.getEntry("Max stim forearm") is not None else data["sequence"][1]["currentIncrementerParameters"][1]
@@ -39,6 +40,7 @@ def chooseValues(button):
 	 		data["sequence"][1]["currentDecrementerParameters"][1] = app.getEntry("Max stim forearm") if app.getEntry("Max stim forearm") is not None else data["sequence"][1]["currentDecrementerParameters"][1]
 	 		dataDouble["sequence"][0]["current"] = app.getEntry("Sensory stim shoulder") if app.getEntry("Sensory stim shoulder") is not None else dataDouble["sequence"][0]["current"]
 	 		dataDouble["sequence"][1]["current"] = app.getEntry("Sensory stim forearm") if app.getEntry("Sensory stim forearm") is not None else dataDouble["sequence"][1]["current"]
+	 		dataSingle["sequence"][0]["current"] = app.getEntry("Sensory stim shoulder") if app.getEntry("Sensory stim shoulder") is not None else dataDouble["sequence"][0]["current"]
  		
  		valid = True
 
