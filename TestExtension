@@ -1,0 +1,2 @@
+python3 /home/cnbi/dev/CNBIscripts/setupTestFESValues.py --task extension
+fesControl -d gui -t /home/cnbi/dev/fesapps/fesjson/resources/extension.json

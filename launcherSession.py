@@ -65,7 +65,7 @@ user = getpass.getuser()
 dataPath = "/home/" + user + "/data/" + subject
 if not os.path.isdir(dataPath):
     os.makedirs(dataPath)
-onlydir = [f for f in os.listdir(dataPath) if os.path.isdir(os.path.join(dataPath, f))]
+onlydir = [f for f in os.listdir(dataPath) if os.path.isdir(os.path.join(dataPath, f)) and f != "resources" and f != "eegc3"]
 # app.go
 app=gui()
 padding = 10;
