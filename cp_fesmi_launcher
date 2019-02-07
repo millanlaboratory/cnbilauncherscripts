@@ -122,7 +122,7 @@ if [ "$movements" == "-1" ]; then
 	exit 1
 fi
 gnome-terminal \
----tab -e "bash -c 'sleep 2; cl_keepalive fesControl -d gui -n /dev -f $movements'" --title "FES control"
+---tab -e "bash -c 'sleep 2; cl_keepalive fesControl -d verbose -n /dev -f $movements'" --title "FES control"
 
 storedir="$storedir$subject/$session"
 echo "[$NAME] - Data saving: $storedir "
