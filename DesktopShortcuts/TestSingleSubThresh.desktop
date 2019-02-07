@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Click-Script
+Icon=utilities-terminal
+Exec=/home/cnbi/dev/CNBIscripts/TestSingle
+Categories=Application;
+Name[en_US]=TestSingleSubThresh
+Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/electrode.png

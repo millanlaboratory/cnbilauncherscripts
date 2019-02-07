@@ -1,2 +1,0 @@
-sudo modprobe mt7662u_sta
-sudo service network-manager restart

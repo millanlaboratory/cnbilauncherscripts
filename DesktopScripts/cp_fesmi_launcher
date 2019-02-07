@@ -1,7 +1,5 @@
 #!/bin/bash
-cd ~/dev/shambcifesdata/Code
-./computeSham
-cd ~/dev/CNBIscripts/
+cd ~/dev/cnbilauncherscripts/
 gnome-terminal --title "loop"\
 ---tab -e "bash -c 'cl_runloopscope -d gtec'" --title "Loop"
 
@@ -147,7 +145,7 @@ echo "[$NAME] - Executable: $executable"
 echo "[$NAME] - GDF:        $gdfname"
 echo "[$NAME] - LOG:        $logname"
 
-# Upload all parameters to nameserver 
+# Upload all parameters to nameserver
 echo "[$NAME] - Uploading XML parameters to nameserver"
 if [ "$modality" == "offline" ]; then
 	cl_init -x $xml -lF -B $block -T $taskset
@@ -165,7 +163,7 @@ fi
 cl_rpc storeconfig $block subject $subject
 error_handling $? cl_rpc
 
-echo "[$NAME] - Saving files: $storedir" 
+echo "[$NAME] - Saving files: $storedir"
 
 targetlog=$storedir"/"$gdfname".target.log"
 cl_rpc storeconfig $block logname $targetlog
@@ -194,12 +192,11 @@ fi
 
 # Unload configuration from nameserver
 cl_init -u -B $block
-cl_rpc eraseconfig $block subject 
+cl_rpc eraseconfig $block subject
 cl_rpc eraseconfig $block logname
 killall cl_keepalive
 cl_killloop
 killall gnome-terminal
-rm *.log 
-cd ~/dev/shambcifesdata/Code
-./computeSham
-cd ~/dev/CNBIscripts/
+rm *.log
+
+cd ~/dev/cnbilauncherscripts/

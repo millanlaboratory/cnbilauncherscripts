@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Click-Script
+Icon=utilities-terminal
+Exec=eegview --device=gtec;
+Categories=Application;
+Name[en_US]=EEGView
+Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/brain.png

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=Click-Script
+Icon=utilities-terminal
+Exec=/home/cnbi/dev/cnbilauncherscripts/DesktopScripts/TestExtension
+Categories=Application;
+Name[en_US]=TestExtension
+Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/extension.png
