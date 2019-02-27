@@ -6,4 +6,4 @@ Icon=utilities-terminal
 Exec=patient-alloc
 Categories=Application;
 Name[en_US]=Patient
-Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/patientAllocation.png
+Icon=/home/cnbi/dev/launcherscripts/DesktopShortcuts/icons/patientAllocation.png

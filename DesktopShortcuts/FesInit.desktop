@@ -6,4 +6,4 @@ Icon=utilities-terminal
 Exec=gnome-terminal -e "bash -c 'fesControl -d verbose -t /home/cnbi/dev/fesapps/fesjson/resources/lowStimDouble.json;$SHELL'"
 Categories=Application;
 Name[en_US]=FesInit
-Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/fes.png
+Icon=/home/cnbi/dev/launcherscripts/DesktopShortcuts/icons/fes.png

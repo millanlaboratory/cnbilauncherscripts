@@ -6,4 +6,4 @@ Icon=utilities-terminal
 Exec=eegview --device=gtec;
 Categories=Application;
 Name[en_US]=EEGView
-Icon=/home/cnbi/dev/cnbilauncherscripts/DesktopShortcuts/icons/brain.png
+Icon=/home/cnbi/dev/launcherscripts/DesktopShortcuts/icons/brain.png
