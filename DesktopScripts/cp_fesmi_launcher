@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/dev/cnbilauncherscripts/
+cd ~/dev/cnbilauncherscripts/RecordingSetupScripts
 gnome-terminal --title "loop"\
 ---tab -e "bash -c 'cl_runloopscope -d gtec'" --title "Loop"
 
