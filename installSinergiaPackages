@@ -92,27 +92,56 @@ rm -rf $HOME/Downloads/libgstreamer
 
 
 echo "${green}${bold} Download CNBI packages${reset}"
-echo "C4science username and password are necessary to download CNBI loop git folders."
-read -p "Username for c4science: " usernameC4science
-read -s -p "Password for c4science: " passwordC4science
-echo "${green}${bold}Download sources from C4Science in $HOME/dev/${reset}";
-mkdir $HOME/dev
-cd $HOME/dev
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/xdffileio.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/eegdev.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/drawtk.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/rtfilter.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/mcpanel.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/eegview.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/lpttrigger.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/tobicore.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/827/eegc.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/cnbitkloop.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7521/cnbitkextrasinergia.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7444/shambcifesdata.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7522/patientallocationsinergia.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/902/fesapps.git
-git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7523/cnbilauncherscripts.git
+installationSource=`Github`
+while true; do
+    read -p "Do you wish to install this program with 1. Github or 2. C4Science? 1 or 2" yn
+    case $yn in
+        [1]* ) ${installationSource}=`Github`;;
+        [2]* ) ${installationSource}=`C4Science`;;
+        * ) echo "Please answer 1 for Github or 2 for C4Science.";;
+    esac
+done
+if [ "$installationSource" == "Github" ]; then
+	declare -a arr=("xdffileio" "eegdev" "drawtk" "rtfilter" "mcpanel" "eegview" "lpttrigger" "tobicore" "eegc" "cnbitkloop" "cnbitkextra")
+	echo "Github username and password are necessary to download CNBI loop git folders."
+	read -p "Username: " usernameC4science
+	read -s -p "Password: " passwordC4science
+	echo "${green}${bold}Download sources from Github in $HOME/dev/${reset}";
+	mkdir $HOME/dev
+	cd $HOME/dev
+	for directory in "${arr[@]}"
+	do
+		echo "${green}${bold}Downloading directory " $directory "${reset}"
+		git clone https://$usernameC4science:$passwordC4science@github.com/millanlaboratory/${directory}
+	done
+	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/shambcifesdata.git
+	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/patientallocationsinergia.git
+	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/fesapps.git
+	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/launcherscripts.git
+else
+	echo "C4science username and password are necessary to download CNBI loop git folders."
+	read -p "Username: " usernameC4science
+	read -s -p "Password: " passwordC4science
+	echo "${green}${bold}Download sources from C4Science in $HOME/dev/${reset}";
+	mkdir $HOME/dev
+	cd $HOME/dev
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/xdffileio.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/eegdev.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/drawtk.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/rtfilter.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/mcpanel.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/eegview.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/lpttrigger.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/tobicore.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/827/eegc.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/source/cnbitkloop.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7521/cnbitkextrasinergia.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7444/shambcifesdata.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7522/patientallocationsinergia.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/902/fesapps.git
+	git clone https://$usernameC4science:$passwordC4science@c4science.ch/diffusion/7523/cnbilauncherscripts.git
+fi
+
 
 echo "${green}${bold} Download and Install MATLAB${reset}"
 echo "Gaspar username and password are necessary to download MATLAB and gtec drivers."

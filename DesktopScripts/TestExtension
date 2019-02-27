@@ -1,2 +1,2 @@
-python3 /home/cnbi/dev/launcherscripts/setupTestFESValues.py --task extension
+python3 /home/cnbi/dev/launcherscripts/RecordingSetupScripts/setupTestFESValues.py --task extension
 fesControl -d gui -t /home/cnbi/dev/fesapps/fesjson/resources/extension.json
