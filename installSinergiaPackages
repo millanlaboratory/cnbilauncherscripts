@@ -240,5 +240,13 @@ cd $HOME/Downloads
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
 sudo dpkg -i teamviewer_amd64.deb
 
+echo "${green}${bold}## Setup ssh for PatientAllocationSinergia ##${reset}"
 cd $HOME
+cp $HOME/dev/launcherscripts/ssh-keys/* $HOME/.ssh/
+echo "added_keys=\`ssh-add -l\`" >> .bashrc
+echo "if [ ! \$(echo $ added_keys | grep -o -e \"id_rsa_phabricator.key\") ]; then
+  ssh-add \"$HOME/.ssh/id_rsa_phabricator.key\"
+fi" >> .bashrc
+
+
 echo "${green}${bold}INSTALLATION COMPLETE${reset}"
