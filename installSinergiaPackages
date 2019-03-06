@@ -42,15 +42,13 @@ do
 			sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 			sudo apt-get update
 			sudo apt-get install gcc-4.8
-			sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/gcc-4.8 100
+			sudo apt-get install g++-4.8
+			sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 100
 			sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 50
 			sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100
 			sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 50
 			sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.8 100
 			sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-7 50
-			sudo update-alternatives --set g++ /usr/bin/g++-4.8
-			sudo update-alternatives --set gcc /usr/bin/gcc-4.8
-			sudo update-alternatives --set cpp-bin /usr/bin/cpp-4.8
 		else
 			sudo apt-get -qq --assume-yes install $i -qq > /dev/null
 		fi
@@ -58,7 +56,9 @@ do
 		echo "Checking $i => ${green}installed${reset}"
 	fi
 done
-
+sudo update-alternatives --set g++ /usr/bin/g++-4.8
+sudo update-alternatives --set gcc /usr/bin/gcc-4.8
+sudo update-alternatives --set cpp-bin /usr/bin/cpp-4.8
 
 
 echo "${green}${bold}## Checking libgstreamer library since it is not supported correctly in new versions of Ubuntu. ##${reset}";
