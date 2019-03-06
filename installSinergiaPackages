@@ -28,35 +28,40 @@ declare -a arr=(
 	"libgtk2.0-dev"
 	"mwrap"
 	"libsdl-mixer1.2-dev"
-	"libcanberra-gtk-module")
+	"libcanberra-gtk-module"
+	"gcc-4.8")
 
-echo "${green}${bold}Installing required packages.${reset}";
+echo "${green}${bold}## Installing required packages. ##${reset}";
 for i in "${arr[@]}"
 do
 	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' -f='${Status} ${Version}\n' $i|grep "install ok installed")
 	if [ "" == "$PKG_OK" ]; then
 		echo "Checking $i => ${red}not installed${reset}"
 		echo "Installing $i"
-		sudo apt-get -qq --assume-yes install $i -qq > /dev/null
+		if [ "$i" == "gcc-4.8" ]; then
+			sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+			sudo apt-get update
+			sudo apt-get install gcc-4.8
+			sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/gcc-4.8 100
+			sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 50
+			sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100
+			sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 50
+			sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.8 100
+			sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-7 50
+			sudo update-alternatives --set g++ /usr/bin/g++-4.8
+			sudo update-alternatives --set gcc /usr/bin/gcc-4.8
+			sudo update-alternatives --set cpp-bin /usr/bin/cpp-4.8
+		else
+			sudo apt-get -qq --assume-yes install $i -qq > /dev/null
+		fi
 	else
 		echo "Checking $i => ${green}installed${reset}"
 	fi
 done
 
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt-get update
-sudo apt-get install gcc-4.8
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/gcc-4.8 100
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 50
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 50
-sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-4.8 100
-sudo update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-7 50
-sudo update-alternatives --set g++ /usr/bin/g++-4.8
-sudo update-alternatives --set gcc /usr/bin/gcc-4.8
-sudo update-alternatives --set cpp-bin /usr/bin/cpp-4.8
 
-echo "${green}${bold}Checking libgstreamer library since it is not supported correctly in new versions of Ubutun.${reset}";
+
+echo "${green}${bold}## Checking libgstreamer library since it is not supported correctly in new versions of Ubuntu. ##${reset}";
 mkdir $HOME/Downloads/libgstreamer
 cd $HOME/Downloads/libgstreamer
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' -f='${Status} ${Version}\n' libgstreamer0.10-0|grep "install ok installed")
@@ -91,33 +96,31 @@ fi
 rm -rf $HOME/Downloads/libgstreamer
 
 
-echo "${green}${bold} Download CNBI packages${reset}"
+echo "${green}${bold}## Download CNBI packages ##${reset}"
 installationSource=`Github`
 while true; do
-    read -p "Do you wish to install this program with 1. Github or 2. C4Science? 1 or 2" yn
+		echo "Do you wish to install this program with 1. Github or 2. C4Science?"
+    read -p "1 or 2? " yn
     case $yn in
-        [1]* ) ${installationSource}=`Github`;;
-        [2]* ) ${installationSource}=`C4Science`;;
+        [1]* ) installationSource="Github"; break;;
+        [2]* ) installationSource="C4Science"; break;;
         * ) echo "Please answer 1 for Github or 2 for C4Science.";;
     esac
 done
 if [ "$installationSource" == "Github" ]; then
-	declare -a arr=("xdffileio" "eegdev" "drawtk" "rtfilter" "mcpanel" "eegview" "lpttrigger" "tobicore" "eegc" "cnbitkloop" "cnbitkextra")
+	declare -a arr=("xdffileio" "eegdev" "drawtk" "rtfilter" "mcpanel" "eegview" "lpttrigger" "tobicore" "eegc" "cnbitkloop" "cnbitkextra" "patientallocationsinergia" "fesinit" "fescontrol" "launcherscripts")
 	echo "Github username and password are necessary to download CNBI loop git folders."
-	read -p "Username: " usernameC4science
-	read -s -p "Password: " passwordC4science
+	read -p "Username: " username
+	read -s -p "Password: " password
 	echo "${green}${bold}Download sources from Github in $HOME/dev/${reset}";
 	mkdir $HOME/dev
 	cd $HOME/dev
 	for directory in "${arr[@]}"
 	do
 		echo "${green}${bold}Downloading directory " $directory "${reset}"
-		git clone https://$usernameC4science:$passwordC4science@github.com/millanlaboratory/${directory}
+		git clone https://$username:$passwordC4science@github.com/millanlaboratory/${directory}
 	done
-	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/shambcifesdata.git
-	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/patientallocationsinergia.git
-	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/fesapps.git
-	git clone https://$usernameC4science:$passwordC4science@github.com/diffusion/launcherscripts.git
+	git clone https://$username:$password@github.com/diffusion/shambcifesdata.git
 else
 	echo "C4science username and password are necessary to download CNBI loop git folders."
 	read -p "Username: " usernameC4science
@@ -143,14 +146,14 @@ else
 fi
 
 
-echo "${green}${bold} Download and Install MATLAB${reset}"
-echo "Gaspar username and password are necessary to download MATLAB and gtec drivers."
-read -p "Username for Gaspar: " usernameGaspar
-read -s -p "Password for Gaspar: " passwordGaspar
+echo "${green}${bold}## Download and Install MATLAB ##${reset}"
 if command -v matlab >/dev/null 2>&1; then
 	echo "${gren}${bold}Matlab found.${reset}"
 else
 	echo "${red}${bold}Matlab not found. Installing Matlab.${reset}";
+	echo "Gaspar username and password are necessary to download MATLAB and gtec drivers."
+	read -p "Username for Gaspar: " usernameGaspar
+	read -s -p "Password for Gaspar: " passwordGaspar
 	sudo mount -t cifs -o username=$usernameGaspar,password=$passwordGaspar //olympe.epfl.ch/students-matlab/linux/Matlab9.3 /mnt/;
 	cd /mnt/;
 	sudo ./install;
@@ -158,7 +161,7 @@ else
 fi
 cd $HOME
 
-echo "${green}${bold}Installing gTec drivers${reset}";
+echo "${green}${bold}## Installing gTec drivers ##${reset}";
 sudo mkdir /mnt/cnbi-commun
 sudo mount -t cifs -o username=$usernameGaspar,password=$passwordGaspar,domain=Intranet,iocharset=utf8,file_mode=0777,dir_mode=0777,nodfs //sti1files.epfl.ch/cnbi/cnbi-commun /mnt/cnbi-commun/
 cp -r /mnt/cnbi-commun/software/third/gtec/g.USBamp_Linux_C_API/g.USBamp_Linux_C_API_1.14.02_Linux64 Documents/
@@ -168,7 +171,7 @@ sudo dpkg -i *.deb
 cd ../g.USBamp_Linux_C_API_1.14.02_Linux64
 sudo dpkg -i *.deb
 
-echo "${green}${bold} Install CNBI packages${reset}"
+echo "${green}${bold}## Install CNBI packages ##${reset}"
 cd $HOME/dev
 declare -a arr=("xdffileio" "eegdev" "drawtk" "rtfilter" "mcpanel" "eegview" "lpttrigger" "tobicore" "eegc" "cnbitkloop" "cnbitkextra")
 for directory in "${arr[@]}"
@@ -202,7 +205,7 @@ do
 	cd ..
 done
 
-echo "${green}${bold} Install FES${reset}"
+echo "${green}${bold}## Install FES ##${reset}"
 cd $HOME/dev/fesapps/fesjson/
 sudo update-alternatives --set g++ /usr/bin/g++-7
 sudo update-alternatives --set gcc /usr/bin/gcc-7
@@ -212,11 +215,11 @@ make clean
 make -j 4
 sudo make install
 
-echo "${green}${bold} Install Patient Allocator${reset}"
+echo "${green}${bold}## Install Patient Allocator ##${reset}"
 cd $HOME/dev/PatientAllocationSinergia/
 pip3 install .
 
-echo "${green}${bold} Setup eegdev${reset}"
+echo "${green}${bold}## Setup eegdev ##${reset}"
 cd $HOME/dev/eegdev/
 sudo make install-usb-plugdev
 
@@ -225,11 +228,17 @@ cp /usr/etc/cnbitk/cnbiloop $HOME/.cnbiloop
 sudo usermod -a -G dialout $USER
 sudo usermod -a -G plugdev $USER
 
-echo "${green}${bold} Create desktop shortcuts${reset}"
-cd $HOME/dev/cnbilauncherscripts/DesktopShortcuts
+echo "${green}${bold}## Create desktop shortcuts ##${reset}"
+cd $HOME/dev/launcherscripts/DesktopShortcuts
 cp *.desktop $HOME/Desktop/
 chmod +x $HOME/Desktop/*
-cd $HOME/dev/cnbilauncherscripts/DesktopScripts
+cd $HOME/dev/launcherscripts/DesktopScripts
 chmod +x *
 
-echo "${green}${bold} INSTALLATION COMPLETE${reset}"
+echo "${green}${bold}## Install Team Viewer ##${reset}"
+cd $HOME/Downloads
+wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
+sudo dpkg -i teamviewer_amd64.deb
+
+cd $HOME
+echo "${green}${bold}INSTALLATION COMPLETE${reset}"
