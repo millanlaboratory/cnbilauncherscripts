@@ -66,7 +66,7 @@ def chooseValues(button):
  	app.stop()
 
 user = getpass.getuser()
-path = "/home/" + user + "/dev/fesapps/fesjson/resources"
+path = "/home/" + user + "/dev/fescontrol/resources"
 fileName = path + "/" + task + ".json"
 with open(fileName, 'r') as f:
  	data = json.load(f)
