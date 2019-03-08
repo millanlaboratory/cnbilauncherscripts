@@ -29,7 +29,13 @@ declare -a arr=(
 	"mwrap"
 	"libsdl-mixer1.2-dev"
 	"libcanberra-gtk-module"
-	"gcc-4.8")
+	"gcc-4.8"
+	"libjsoncpp-dev"
+	"python-matplotlib"
+	"python-numpy"
+	"python2.7-dev"
+	"meson"
+)
 
 echo "${green}${bold}## Installing required packages. ##${reset}";
 for i in "${arr[@]}"
@@ -172,6 +178,16 @@ cd ../g.USBamp_Linux_C_API_1.14.02_Linux64
 sudo dpkg -i *.deb
 
 echo "${green}${bold}## Install CNBI packages ##${reset}"
+while true; do
+	echo "Do you want to recompile all modules? yes or no"
+	recompile=true
+	read -p "y or n? " yn
+	case $yn in
+		[y]* ) recompile=true; break;;
+		[n]* ) recompile=false; break;;
+		* ) echo "Please answer 1 for Github or 2 for C4Science.";;
+	esac
+done
 cd $HOME/dev
 declare -a arr=("xdffileio" "eegdev" "drawtk" "rtfilter" "mcpanel" "eegview" "lpttrigger" "tobicore" "eegc" "cnbitkloop" "cnbitkextra")
 for directory in "${arr[@]}"
@@ -196,8 +212,10 @@ do
 		echo "${bold}Autogen make files.${reset}"
 		./configure --prefix=/usr/ --silent || { echo "command failed"; exit 1; }
 		echo "${bold}Compile program.${reset}"
-		sudo make uninstall
-		make clean
+		if [ recompile ]; then
+			sudo make uninstall
+			make clean
+		fi
 		make -j 4 --quiet > /dev/null || { echo "command failed"; exit 1; }
 		echo "${bold}Install program.${reset}"
 		sudo make --quiet install > /dev/null || { echo "command failed"; exit 1; }
@@ -206,17 +224,24 @@ do
 done
 
 echo "${green}${bold}## Install FES ##${reset}"
-cd $HOME/dev/fesapps/fesjson/
-sudo update-alternatives --set g++ /usr/bin/g++-7
-sudo update-alternatives --set gcc /usr/bin/gcc-7
-sudo update-alternatives --set cpp-bin /usr/bin/cpp-7
+cd $HOME/dev
+git clone https://github.com/open-source-parsers/jsoncpp.git
+cd jsoncpp/
+BUILD_TYPE=debug
+LIB_TYPE=shared
+meson --buildtype ${BUILD_TYPE} --default-library ${LIB_TYPE} . build-${LIB_TYPE}
+ninja -v -C build-${LIB_TYPE}
+cd build-${LIB_TYPE}
+meson test --no-rebuild --print-errorlogs
+sudo ninja install
+cd $HOME/dev/fescontrol/
 cmake .
 make clean
 make -j 4
 sudo make install
 
 echo "${green}${bold}## Install Patient Allocator ##${reset}"
-cd $HOME/dev/PatientAllocationSinergia/
+cd $HOME/dev/patientallocationsinergia/
 pip3 install .
 
 echo "${green}${bold}## Setup eegdev ##${reset}"
@@ -238,15 +263,22 @@ chmod +x *
 echo "${green}${bold}## Install Team Viewer ##${reset}"
 cd $HOME/Downloads
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
-sudo dpkg -i teamviewer_amd64.deb
+sudo apt-get install ./teamviewer_amd64.deb
 
 echo "${green}${bold}## Setup ssh for PatientAllocationSinergia ##${reset}"
 cd $HOME
+mkdir .ssh
 cp $HOME/dev/launcherscripts/ssh-keys/* $HOME/.ssh/
-echo "added_keys=\`ssh-add -l\`" >> .bashrc
-echo "if [ ! \$(echo $ added_keys | grep -o -e \"id_rsa_phabricator.key\") ]; then
-  ssh-add \"$HOME/.ssh/id_rsa_phabricator.key\"
-fi" >> .bashrc
+ADDSSHKEYBASH1="added_keys=\`ssh-add -l\`"
+ADDSSHKEYBASH2="if [ ! \$(\"\${added_keys}\" | grep -o -e \"id_rsa_phabricator.key\") ]; then"
+ADDSSHKEYBASH3="  ssh-add \"$HOME/.ssh/id_rsa_phabricator.key\""
+ADDSSHKEYBASH4="fi"
+if ! grep -q "${ADDSSHKEYBASH1}" ".bashrc"; then
+	echo -e ${ADDSSHKEYBASH1} >> .bashrc
+	echo -e ${ADDSSHKEYBASH2} >> .bashrc
+	echo ${ADDSSHKEYBASH3} >> .bashrc
+	echo -e ${ADDSSHKEYBASH4} >> .bashrc
+fi
 
 
 echo "${green}${bold}INSTALLATION COMPLETE${reset}"

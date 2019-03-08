@@ -1,2 +1,2 @@
 python3 /home/cnbi/dev/launcherscripts/RecordingSetupScripts/setupTestFESValues.py --task flexion
-fesControl -d gui -t /home/cnbi/dev/fesapps/fesjson/resources/flexion.json
+fesControl -d gui -t /home/cnbi/dev/fescontrol/resources/flexion.json
