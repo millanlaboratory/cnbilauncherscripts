@@ -35,6 +35,7 @@ declare -a arr=(
 	"python-numpy"
 	"python2.7-dev"
 	"meson"
+	"python3-tk"
 )
 
 echo "${green}${bold}## Installing required packages. ##${reset}";
@@ -268,16 +269,19 @@ sudo apt-get install ./teamviewer_amd64.deb
 echo "${green}${bold}## Setup ssh for PatientAllocationSinergia ##${reset}"
 cd $HOME
 mkdir .ssh
+chmod 400 $HOME/dev/launcherscripts/ssh-keys/*
 cp $HOME/dev/launcherscripts/ssh-keys/* $HOME/.ssh/
 ADDSSHKEYBASH1="added_keys=\`ssh-add -l\`"
 ADDSSHKEYBASH2="if [ ! \$(\"\${added_keys}\" | grep -o -e \"id_rsa_phabricator.key\") ]; then"
 ADDSSHKEYBASH3="  ssh-add \"$HOME/.ssh/id_rsa_phabricator.key\""
 ADDSSHKEYBASH4="fi"
+ADDLOCALATH="PATH=\"$HOME/.local/bin:$PATH\""
 if ! grep -q "${ADDSSHKEYBASH1}" ".bashrc"; then
 	echo -e ${ADDSSHKEYBASH1} >> .bashrc
 	echo -e ${ADDSSHKEYBASH2} >> .bashrc
 	echo ${ADDSSHKEYBASH3} >> .bashrc
 	echo -e ${ADDSSHKEYBASH4} >> .bashrc
+	echo -e ${ADDLOCALATH} >> .bashrc
 fi
 
 
