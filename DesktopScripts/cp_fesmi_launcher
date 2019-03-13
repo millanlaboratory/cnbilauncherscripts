@@ -179,7 +179,7 @@ cl_rpc openxdf $storedir"/"$gdfname".gdf" $logname "$storedir$logline"
 
 # Launching the executable protocol
 echo "[$NAME] - Launching executable protocol: $executable"
-$executable
+gdb $executable
 
 sleep 10
 
