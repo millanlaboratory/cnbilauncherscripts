@@ -196,7 +196,5 @@ cl_rpc eraseconfig $block subject
 cl_rpc eraseconfig $block logname
 killall cl_keepalive
 cl_killloop
-killall gnome-terminal
+killall gnome-terminal-server
 rm *.log
-
-cd ~/dev/launcherscripts/
